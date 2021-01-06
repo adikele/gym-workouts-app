@@ -1,0 +1,1 @@
+CREATE TABLE records (id SERIAL PRIMARY KEY, body_part VARCHAR,  exercise VARCHAR, set_number INTEGER, weight INTEGER, reps INTEGER);
