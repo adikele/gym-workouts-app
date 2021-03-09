@@ -1,0 +1,13 @@
+<html>
+<form method="post" action="/ref_form2_results">
+
+{% for i in range (0,3) %}
+    set no {{ i }}
+    <input type="text" name="fname{{ i }}">  
+{% endfor  %}
+    <input type="submit" value="Save"/>
+    <br>
+    <br>
+    <br>
+</form>
+</html>

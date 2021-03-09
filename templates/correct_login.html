@@ -1,0 +1,13 @@
+<p>correct_login</p> 
+
+{% if session.username %}
+
+
+<p>Olet kirjautunut nimellä {{ session.username }}</p>
+<a href="/logout">Kirjaudu ulos</a>
+<br>
+<br>
+<br>
+<a href="/">Back to home page</a>
+
+{% endif %}

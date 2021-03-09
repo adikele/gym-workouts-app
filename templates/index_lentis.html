@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <body>
+    <br> 
+    <br> Workout entries: save your weightlifting workout. Enter (and save) separately for each body part.
+    <br>
+    <br>
+    <form method="post" action="/training_results">
+        <br>
+        SHOULDERS
+        Select exercise type
+        <select id="exe" name="select_exercise" required >
+        {% for option in form_exercise %}
+        <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+        </select>
+        <br>
+        <br>
+        How many sets did you work out? 
+        <input type="text" name="sets_count"> 
+        <br>
+        <br>
+        {% for i in range (0,5) %}
+
+        set no {{ i + 1 }}
+        Select weight in kilograms
+        <select id="weights" name="select_weight{{ i }}" required >
+        {% for option in form_weights %}
+        <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+        </select>
+
+        Select number of repititions performed
+        <select id="repititions" name="select_reps{{ i }}" required >
+        {% for option in form_repititions %}
+        <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+        </select>
+        <br>
+
+        {% endfor %}
+        <br>
+        <br>
+
+        <input type="submit" value="Save"/>
+        <br>
+        <br>
+        <br>
+    </form>
+    <br>
+    <a href="/outofdb_new">Show all records</a>
+    </body>
+</html>

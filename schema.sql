@@ -1,1 +1,5 @@
-CREATE TABLE records (id SERIAL PRIMARY KEY, body_part VARCHAR,  exercise VARCHAR, set_number INTEGER, weight INTEGER, reps INTEGER);
+DROP TABLE IF EXISTS records;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE records (id SERIAL PRIMARY KEY, body_part VARCHAR,  exercise VARCHAR, set_number INTEGER, weight INTEGER, reps INTEGER, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, user_id VARCHAR);
+CREATE TABLE users (id SERIAL PRIMARY KEY, username TEXT, password TEXT);
