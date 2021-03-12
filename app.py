@@ -4,6 +4,7 @@
 from flask import Flask
 from flask import redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import check_password_hash, generate_password_hash
 from os import getenv
 
 app = Flask(__name__)
@@ -90,10 +91,11 @@ def outofdb_new():
 def signup():
     selected_username = request.form["signup_username"]
     selected_password = request.form["signup_password"]
+    hash_value = generate_password_hash(selected_password) #new
     sql = "INSERT INTO users (username, password ) VALUES (:username, :password)"
     result = db.session.execute(
         sql,
-        {"username": selected_username, "password": selected_password},
+        {"username": selected_username, "password": hash_value}, #modified
     )
     db.session.commit()
     return render_template("signup_done.html")
@@ -106,11 +108,12 @@ def login():
     sql = "SELECT password FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()    
-    if user == None:
+    if user == None: #what is this 'user' which is returned?, it is tested twice
         return redirect("/invalid_login")
     else:
-        password_from_db = user[0]
-        if password_from_db == password:
+        hash_value_from_db = user[0] #modified
+        if check_password_hash(hash_value_from_db, password): #new
+        #if password_from_db == password:
             session["username"] = username
             return redirect("/correct_login")
         else:
