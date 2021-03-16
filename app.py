@@ -1,5 +1,6 @@
 #4.3.2021
 #First cloud upload:
+#12.3.21 On Heroku and password hashed in db
 
 from flask import Flask
 from flask import redirect, render_template, request, session
@@ -115,7 +116,8 @@ def login():
         if check_password_hash(hash_value_from_db, password): #new
         #if password_from_db == password:
             session["username"] = username
-            return redirect("/correct_login")
+            #return redirect("/correct_login")  #new process
+            return redirect("/exercise_categories") #new process
         else:
             return redirect("/invalid_pw")
 
@@ -135,10 +137,17 @@ def invalid_login():
 def invalid_pw():
     return render_template("invalid_pw.html")
 
-
+'''
 @app.route("/correct_login")
 def correct_login():
     return render_template("correct_login.html")
+'''
+
+
+#new process
+@app.route("/exercise_categories")
+def exercise_categories():
+    return render_template("exercise_categories.html")
 
 @app.route("/ref-form")
 def ref_form():
