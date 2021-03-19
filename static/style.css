@@ -1,0 +1,33 @@
+.header {
+    background: sandybrown;
+    font-weight: bold;
+    padding: 2em 1em;
+    font-size: 2em;
+}
+
+body {
+    background-color: lightblue;
+    margin: auto;
+    max-width: 45em;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+nav ul {
+  padding: 0;
+}
+nav li {
+    display: inline-block;
+    padding: 0 .5em;
+}
+
+
+form {
+  display: block;
+  padding: 0.5em;
+  float: right;
+ 
+}
+
+h2 {
+  margin-top: 0;
+}
