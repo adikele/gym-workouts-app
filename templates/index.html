@@ -1,26 +1,65 @@
-{% if session.username %}
-<p>Olet kirjautunut nimellä {{ session.username }}</p>
-<a href="/logout">Kirjaudu ulos</a>
-{% else %}
-<p>Login here:</p>
-<form action="/login" method="POST">
-<p>Tunnus:<br>
-<input type="text" name="username"></p>
-<p>Salasana:<br>
-<input type="password" name="password"></p>
-<input type="submit" value="Kirjaudu">
-</form>
-<br>
-<br>
-<br>
-<p>Signup here:</p>
-<form action="/signup" method="POST">
-<p>Tunnus:<br>
-<input type="text" name="signup_username"></p>
-<p>Salasana:<br>
-<input type="password" name="signup_password"></p>
-<input type="submit" value="Reikistroi">
-</form>
-{% endif %}
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
+<body>
+  <div class="header">
+        <h1>Strongluku</h1>
+        <small><i>my training diary</i></small>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#">Shoulders</a></li>
+      <li><a href="#">Page 2 - dummy</a></li>
+      <li><a href="#">Page 3 - dummy</a></li>
+    </ul>
+  </nav>
+
+  {% if session.username %}
+  <p>Olet kirjautunut nimellä {{ session.username }}</p>
+  <a href="/logout">Kirjaudu ulos</a>
+  {% else %} 
+  
+  <form action="/login" method="POST">
+    Sign In here:
+    <br>
+    Tunnus:
+    <input type="text" name="username">
+    <br>
+    Salasana:
+    <input type="password" name="password">
+    <br>
+    <input type="submit" value="Kirjaudu">
+    <br>
+  </form>
+  
+  <form action="/signup" method="POST"> 
+    Sign Up here:
+    <br>
+    Tunnus:
+    <input type="text" name="signup_username">
+    <br>
+    Salasana:
+    <input type="password" name="signup_password">
+    <br>
+    <input type="submit" value="Reikistroi">
+    <br>
+  </form>
+  {% endif %}
+
+  <br>
+  <br>
+  <br>
+  <h3>Guidelines:</h3>
+          1. Register your account with a log-in and password in "Sign Up"
+    <br>  2. Log in with your credentials in "Sign In"
+    <br>  3. After a training session,
+    <br>     enter your workouts by pressing "Enter Workouts"
+    <br>  (currently only "shoulders" section works)
+    <br>  4. You can read saved records by pressing "Show Recrods"
+    <br>  5. Yet to come: more workout sections (running, body weight, etc),
+    <br>      visual dispay of records, and more.. 
+    <br> 
+    <br> 
 <a href="/index_lentis">ENTER WORKOUT</a>
+</body>
