@@ -31,6 +31,21 @@ def index_lentis():
         form_repititions=list_reps,
     )
 
+#adding for back
+@app.route("/type_back")
+def type_back():
+    list_exe = [
+        "back - front row",
+        "back - singlehanded dumbbell pull"
+    ]
+    list_weights = [n for n in range(1, 30)]
+    list_reps = [0, 1, 2, 3, 4, 5, 6, 7]
+    return render_template(
+        "type_back.html",
+        form_weights=list_weights,
+        form_exercise=list_exe,
+        form_repititions=list_reps,
+    )
 
 @app.route("/training_results", methods=["POST"])
 def training_results():
@@ -65,6 +80,41 @@ def training_results():
         db.session.commit()
     return redirect("/")
 
+#adding for back
+@app.route("/results_back", methods=["POST"])
+def results_back():
+    set_number = 1
+    selected_bp = "back" #changed
+    selected_exercise = request.form["select_exercise"]
+    selected_weight = [None] * 5
+    selected_reps = [None] * 5
+
+    for x in range(0, 5):
+        selected_weight[x] = request.form.get("select_weight%d" % x)
+
+    for x in range(0, 5):
+        selected_reps[x] = request.form.get("select_reps%d" % x)
+
+    selected_user_id = session["username"]
+
+    sets_count_no = int(request.form["sets_count"])
+
+    for x in range(0, sets_count_no):
+        sql = "INSERT INTO records (user_id, body_part, exercise, weight, reps, created_at) VALUES (:user_id, :body_part, :exercise, :weight, :reps, NOW())"
+        result = db.session.execute(
+            sql,
+            {
+                "body_part": selected_bp,
+                "exercise": selected_exercise,
+                "weight": selected_weight[x],
+                "reps": selected_reps[x],
+                "user_id": selected_user_id,
+            },
+        )
+        db.session.commit()
+    return redirect("/")
+    
+    
 
 @app.route("/outofdb_new")
 def outofdb_new():

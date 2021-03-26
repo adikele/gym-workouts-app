@@ -1,13 +1,32 @@
-<p>What did you train?</p> 
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<body>
+  <div class="header">
+        <h1>Strongluku</h1>
+        <small><i>my training diary</i></small>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="/index_lentis">Shoulders</a></li>
+      <li><a href="/type_back">Back</a></li>
+      <li><a href="/outofdb_new">Show all records</a></li>
+    </ul>
+  </nav>
+
+    <br> 
+    <p>What did you train?</p> 
 
 {% if session.username %}
-
-
 <p>Olet kirjautunut nimellä {{ session.username }}</p>
 <a href="/logout">Kirjaudu ulos</a>
 <br>
-<a href="/index_lentis">Shoulders</a>
 <br>
 <a href="/">Back to home page</a>
-
 {% endif %}
+
+</body>
+
+
+
