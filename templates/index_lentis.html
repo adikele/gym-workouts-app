@@ -9,8 +9,10 @@
   </div>
   <nav>
     <ul>
+      <li><a href="/">Main Page</a></li>
       <li><a href="/index_lentis">Shoulders</a></li>
       <li><a href="/type_back">Back</a></li>
+      <li><a href="/type_bodyweight">Body Weight</a></li>
       <li><a href="/outofdb_new">Show all records</a></li>
     </ul>
   </nav>
@@ -27,9 +29,8 @@
     <br> Note: Workouts are recorded for the day of entry.
     <br>
     <form method="post" action="/training_results">
-        <br>
-        
-        Select exercise type
+        <br>     
+        Select exercise type:
         <select id="exe" name="select_exercise" required >
         {% for option in form_exercise %}
         <option value="{{ option }}">{{ option }}</option>
@@ -42,8 +43,7 @@
         <br>
         <br>
         {% for i in range (0,5) %}
-
-        set no {{ i + 1 }}
+        Set no: {{ i + 1 }}
         Select weight in kilograms
         <select id="weights" name="select_weight{{ i }}" required >
         {% for option in form_weights %}

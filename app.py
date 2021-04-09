@@ -47,6 +47,20 @@ def type_back():
         form_repititions=list_reps,
     )
 
+#adding for bodyweight
+@app.route("/type_bodyweight")
+def type_bodyweight():
+    list_exe = [
+        "pullup - front pullup",
+        "pullup - back pullup"
+    ]
+    list_reps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    return render_template(
+        "type_bodyweight.html",
+        form_exercise=list_exe,
+        form_repititions=list_reps,
+    )
+
 @app.route("/training_results", methods=["POST"])
 def training_results():
     set_number = 1
@@ -114,7 +128,38 @@ def results_back():
         db.session.commit()
     return redirect("/")
     
-    
+
+#adding for results_bodyweight
+@app.route("/results_bodyweight", methods=["POST"])
+def results_bodyweight():
+    set_number = 1
+    selected_bp = "bodyweight" #changed
+    selected_exercise = request.form["select_exercise"]
+    selected_day = request.form["select_day"]
+    selected_reps = [None] * 5
+
+    for x in range(0, 5):
+        selected_reps[x] = request.form.get("select_reps%d" % x)
+
+    selected_user_id = session["username"]
+
+    sets_count_no = int(request.form["sets_count"])
+
+    for x in range(0, sets_count_no):
+        sql = "INSERT INTO records (user_id, body_part, exercise, reps, created_at, day) VALUES (:user_id, :body_part, :exercise, :reps, NOW(), :day)"
+        result = db.session.execute(
+            sql,
+            {
+                "body_part": selected_bp,
+                "exercise": selected_exercise,
+                "reps": selected_reps[x],
+                "user_id": selected_user_id,
+                "day": selected_day,
+            },
+        )
+        db.session.commit()
+    return redirect("/")
+
 
 @app.route("/outofdb_new")
 def outofdb_new():

@@ -23,13 +23,13 @@
   {% endif %}
 
     <br> 
-    <br> Workout entries for: BACK
-    <br> Save your weightlifting workouts. 
-    <br> Enter (and save) separately for each body part.
-    <br> Note: Workouts are recorded for the day of entry.
+    <br> Workout entries for: BODY WEIGHT
+    <br> Save your body weight workouts. 
+    <br> Enter (and save) separately for each exercise.
+    <br> 
     <br>
-    <form method="post" action="/results_back">
-        <br>      
+    <form method="post" action="/results_bodyweight">
+        <br>
         Select exercise type:
         <select id="exe" name="select_exercise" required >
         {% for option in form_exercise %}
@@ -37,20 +37,16 @@
         {% endfor %}
         </select>
         <br>
+        <br>Exercise Day:  <input type="date" id="day" name="select_day">
+        <br>
         <br>
         How many sets did you work out? 
         <input type="text" name="sets_count"> 
+        <br> Choose a number between 1 and 5
         <br>
         <br>
         {% for i in range (0,5) %}
         Set no {{ i + 1 }}:
-        Select weight in kilograms
-        <select id="weights" name="select_weight{{ i }}" required >
-        {% for option in form_weights %}
-        <option value="{{ option }}">{{ option }}</option>
-        {% endfor %}
-        </select>
-
         Select number of repititions performed
         <select id="repititions" name="select_reps{{ i }}" required >
         {% for option in form_repititions %}
