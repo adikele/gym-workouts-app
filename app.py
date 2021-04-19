@@ -1,13 +1,20 @@
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, Response
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+from datetime import datetime
+import copy
 from os import getenv
+import io
+#19.4: plots and all working
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 app.secret_key = getenv("SECRET_KEY")
+global x_sorted, y_sorted
 
 
 @app.route("/")
@@ -31,7 +38,6 @@ def index_lentis():
         form_repititions=list_reps,
     )
 
-#adding for back
 @app.route("/type_back")
 def type_back():
     list_exe = [
@@ -47,7 +53,6 @@ def type_back():
         form_repititions=list_reps,
     )
 
-#adding for bodyweight
 @app.route("/type_bodyweight")
 def type_bodyweight():
     list_exe = [
@@ -94,7 +99,7 @@ def training_results():
         db.session.commit()
     return redirect("/")
 
-#adding for back
+
 @app.route("/results_back", methods=["POST"])
 def results_back():
     set_number = 1
@@ -129,7 +134,6 @@ def results_back():
     return redirect("/")
     
 
-#adding for results_bodyweight
 @app.route("/results_bodyweight", methods=["POST"])
 def results_bodyweight():
     set_number = 1
@@ -220,6 +224,81 @@ def invalid_pw():
 @app.route("/exercise_categories")
 def exercise_categories():
     return render_template("exercise_categories.html")
+
+
+#for plotting pullups:
+def create_figure(dates, score):  
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+    axis.bar(dates, score, color="blue")
+    axis.set_ylabel("Persons infected in last 14 days (source: EU Open Data)")
+    axis.set_title(
+        f"Cumulative number (14 days) of COVID-19 cases per 100000 persons \n Data updated on:"
+    )
+    return fig
+
+@app.route("/plot.png")
+def plot():
+    global x_sorted
+    global y_sorted
+    fig = create_figure(x_sorted, y_sorted)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype="image/png")
+
+
+#extract exercise data and pass to function: create_figure
+@app.route("/results_plotdata")
+def results_plotdata():
+    '''
+    5 conditions:
+    (i) row which is first row:
+    initialize rep_list to blank, append to new rep_list
+    (ii) row with new date:
+    sum rep_list, put contents of sum_rep_list in dict, initialize rep_list to blank, append to new rep_list
+    (iii) row with same date as previous row:
+    append to rep_list
+    (iv) row which is last row (with either of the above condition):
+    do the corresponding action from (i) or (ii) AND
+    sum rep_list, put contents of sum_rep_list in dict
+    '''
+    global x_sorted
+    global y_sorted
+    selected_user_id = session["username"]
+    selected_exe = 'pullup - front pullup'
+    sql = "SELECT * FROM records WHERE records.user_id = :x AND records.exercise = :y"
+    result = db.session.execute(sql, {"x": selected_user_id, "y": selected_exe})
+    data = result.fetchall()
+    pullup_dict = {}
+    rep_list = []
+    date_previous = '0'
+    for row in data:      
+        date_current = row[8]
+        if  date_previous == '0':
+            rep_list = []
+            rep_list.append(row[5])  # row[5] = repitions
+            date_previous = date_current 
+        elif date_current == date_previous:
+            rep_list.append(row[5])
+        elif date_current != date_previous:
+            rep_list_sum = sum (rep_list)
+            pullup_dict [date_previous] = rep_list_sum
+            rep_list = []
+            rep_list.append(row[5])   
+            date_previous = date_current        
+        rep_list_sum = sum (rep_list)
+        pullup_dict [date_current] = rep_list_sum
+
+    x = pullup_dict.keys() #dates
+    y = pullup_dict.values()
+    xy = zip (x,y)
+    xyz = sorted ( xy, key=lambda pair: pair[0])
+    x_sorted = [ x for x,y in xyz ] 
+    y_sorted = [ y for x,y in xyz ] 
+    fig = create_figure(x_sorted,y_sorted) 
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)  
+    return render_template("results_plotdata.html", result=pullup_dict.keys())
 
 
 if __name__ == "__main__":
