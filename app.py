@@ -231,17 +231,18 @@ def create_figure(dates, score):
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
     axis.bar(dates, score, color="blue")
-    axis.set_ylabel("Persons infected in last 14 days (source: EU Open Data)")
+    axis.set_ylabel("Total number of pullups for a day")
     axis.set_title(
-        f"Cumulative number (14 days) of COVID-19 cases per 100000 persons \n Data updated on:"
+        f"Your pullups progress"
     )
     return fig
 
 @app.route("/plot.png")
 def plot():
     global x_sorted
+    global date_list
     global y_sorted
-    fig = create_figure(x_sorted, y_sorted)
+    fig = create_figure(date_list, y_sorted)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype="image/png")
@@ -263,6 +264,7 @@ def results_plotdata():
     sum rep_list, put contents of sum_rep_list in dict
     '''
     global x_sorted
+    global date_list
     global y_sorted
     selected_user_id = session["username"]
     selected_exe = 'pullup - front pullup'
@@ -295,7 +297,15 @@ def results_plotdata():
     xyz = sorted ( xy, key=lambda pair: pair[0])
     x_sorted = [ x for x,y in xyz ] 
     y_sorted = [ y for x,y in xyz ] 
-    fig = create_figure(x_sorted,y_sorted) 
+    print (x_sorted) #prints ok in datetime
+    date_list = []
+    for i in x_sorted:
+        j = i.strftime('%m/%d/%Y')
+        date_list.append(j)
+
+
+    #fig = create_figure(x_sorted,y_sorted) 
+    fig = create_figure(date_list,y_sorted) 
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)  
     return render_template("results_plotdata.html", result=pullup_dict.keys())
