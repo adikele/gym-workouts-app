@@ -66,6 +66,22 @@ def type_bodyweight():
         form_repititions=list_reps,
     )
 
+@app.route("/type_bodyweight_p")
+def type_bodyweight_p():
+    list_exe = [
+        "pullup - front pullup",
+        "pullup - back pullup"
+    ]
+    list_reps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    #list_planktime = [45, 50, 55, 60]
+    list_planktime = list(range(45, 71))
+    return render_template(
+        "type_bodyweight_p.html",
+        form_exercise=list_exe,
+        form_repititions=list_reps,
+        form_planktime=list_planktime,
+    )
+
 @app.route("/training_results", methods=["POST"])
 def training_results():
     set_number = 1
@@ -164,6 +180,39 @@ def results_bodyweight():
         db.session.commit()
     return redirect("/")
 
+@app.route("/results_plank", methods=["POST"])
+def results_plank():
+    #I don't need all the initial bw stuff
+    '''
+    set_number = 1
+    selected_bp = "bodyweight" #changed
+    selected_exercise = request.form["select_exercise"]
+    selected_day = request.form["select_day"]
+    selected_reps = [None] * 5
+
+    for x in range(0, 5):
+        selected_reps[x] = request.form.get("select_reps%d" % x)
+    '''
+    selected_bp = "bodyweight"
+    selected_exercise = "plank"
+    selected_user_id = session["username"]
+    selected_holdtime = int(request.form["select_planktime"])
+    selected_day = request.form["select_day"]
+
+    sql = "INSERT INTO records (user_id, body_part, exercise, hold_time, created_at, day) VALUES (:user_id, :body_part, :exercise, :hold_time, NOW(), :day)"
+    result = db.session.execute(
+        sql,
+        {
+            "body_part": selected_bp,
+            "exercise": selected_exercise,
+            "hold_time": selected_holdtime,
+            "user_id": selected_user_id,
+            "day": selected_day,
+        },
+    )
+    print (result)
+    db.session.commit()
+    return redirect("/")
 
 @app.route("/outofdb_new")
 def outofdb_new():
@@ -232,9 +281,7 @@ def create_figure(dates, score):
     axis = fig.add_subplot(1, 1, 1)
     axis.bar(dates, score, color="blue")
     axis.set_ylabel("Total number of pullups for a day")
-    axis.set_title(
-        f"Your pullups progress"
-    )
+    #axis.set_title(f"Your pullups progress")
     return fig
 
 @app.route("/plot.png")
