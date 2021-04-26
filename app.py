@@ -29,8 +29,8 @@ def index_lentis():
         "shoulders - lateral raises",
         "shoulders - overhead dumbbells",
     ]
-    list_weights = [n for n in range(1, 30)]
-    list_reps = [0, 1, 2, 3, 4, 5, 6, 7]
+    list_weights = list(range(1, 61))
+    list_reps = list(range(1, 16))
     return render_template(
         "index_lentis.html",
         form_weights=list_weights,
@@ -44,8 +44,8 @@ def type_back():
         "back - front row",
         "back - singlehanded dumbbell pull"
     ]
-    list_weights = [n for n in range(1, 30)]
-    list_reps = [0, 1, 2, 3, 4, 5, 6, 7]
+    list_weights = list(range(1, 61))
+    list_reps = list(range(1, 16))
     return render_template(
         "type_back.html",
         form_weights=list_weights,
@@ -57,9 +57,12 @@ def type_back():
 def type_bodyweight():
     list_exe = [
         "pullup - front pullup",
-        "pullup - back pullup"
+        "pullup - back pullup",
+        "pushup - wide",
+        "pushup - narrow"
     ]
-    list_reps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    list_reps = list(range(1, 41))
+    #list_reps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     return render_template(
         "type_bodyweight.html",
         form_exercise=list_exe,
@@ -72,7 +75,8 @@ def type_bodyweight_p():
         "pullup - front pullup",
         "pullup - back pullup"
     ]
-    list_reps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    list_reps = list(range(1, 41))
+    #list_reps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     #list_planktime = [45, 50, 55, 60]
     list_planktime = list(range(45, 71))
     return render_template(
