@@ -92,6 +92,7 @@ def training_results():
     selected_bp = "shoulders"
     selected_exercise = request.form["select_exercise"]
     selected_weight = [None] * 5
+    selected_day = request.form["select_day"] #new
     selected_reps = [None] * 5
 
     for x in range(0, 5):
@@ -105,7 +106,7 @@ def training_results():
     sets_count_no = int(request.form["sets_count"])
 
     for x in range(0, sets_count_no):
-        sql = "INSERT INTO records (user_id, body_part, exercise, weight, reps, created_at) VALUES (:user_id, :body_part, :exercise, :weight, :reps, NOW())"
+        sql = "INSERT INTO records (user_id, body_part, exercise, weight, reps, created_at, day) VALUES (:user_id, :body_part, :exercise, :weight, :reps, NOW(), :day)"
         result = db.session.execute(
             sql,
             {
@@ -114,6 +115,7 @@ def training_results():
                 "weight": selected_weight[x],
                 "reps": selected_reps[x],
                 "user_id": selected_user_id,
+                "day": selected_day,
             },
         )
         db.session.commit()

@@ -26,7 +26,6 @@
     <br> Workout entries for: SHOULDERS
     <br> Save your weightlifting workouts. 
     <br> Enter (and save) separately for each body part.
-    <br> Note: Workouts are recorded for the day of entry.
     <br>
     <form method="post" action="/training_results">
         <br>     
@@ -36,6 +35,8 @@
         <option value="{{ option }}">{{ option }}</option>
         {% endfor %}
         </select>
+        <br>
+        <br>Exercise Day:  <input type="date" id="day" name="select_day">
         <br>
         <br>
         How many sets did you work out? 
